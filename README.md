@@ -32,7 +32,7 @@ Built for hostel/office scenarios where friends order together from Swiggy, Blin
 ![Dashboard Empty](./cartshare/assets/catalog.jpg)
 
 ### 4. Dashboard - With Items
-![Dashboard Cart](./cartshare/assets/cart.jpg)
+![Dashboard Cart](./cartshare/assets/cart.jpeg)
 
 ### 5. Payment Receipt
 ![Receipt](./cartshare/assets/recipt.jpg)
