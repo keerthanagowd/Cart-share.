@@ -23,19 +23,19 @@ Built for hostel/office scenarios where friends order together from Swiggy, Blin
 ## 📸 Screenshots
 
 ### 1. Login Page
-![Login Page](./catshare/assets/login.jpg)
+![Login Page](./cartshare/assets/login.jpg)
 
 ### 2. Register Page  
-![Register Page](./catshare/assets/register.jpeg)
+![Register Page](./cartshare/assets/register.jpeg)
 
 ### 3. Dashboard - Empty Cart
-![Dashboard Empty](./catshare/assets/catalog.jpg)
+![Dashboard Empty](./cartshare/assets/catalog.jpg)
 
 ### 4. Dashboard - With Items
-![Dashboard Cart](./catshare/assets/cart.jpg)
+![Dashboard Cart](./cartshare/assets/cart.jpg)
 
 ### 5. Payment Receipt
-![Receipt](./catshare/assets/recipt.jpg)
+![Receipt](./cartshare/assets/recipt.jpg)
 
 ### 6. Print Receipt View
-![Print Receipt](./catshare/assets/print.jpg)
+![Print Receipt](./cartshare/assets/print.jpg)
