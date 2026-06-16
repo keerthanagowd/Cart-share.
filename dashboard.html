@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+é<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -27,14 +27,13 @@
         <label class="form-label small fw-semibold">Have a room code?</label>
         <div class="input-group">
           <input type="text" id="joinCodeInput" class="form-control text-uppercase" placeholder="e.g. X7K2P9" maxlength="6">
-          <button class="btn btn-primary" id="joinRoomBtn">Join Room</button>
+        <button class="btn btn-primary" onclick="joinRoom(document.getElementById('joinCodeInput').value)">Join Room</button>
         </div>
         <div id="joinError" class="text-danger small mt-1"></div>
       </div>
 
       <div class="text-center text-muted small mb-3">— or —</div>
-
-      <button class="btn btn-success w-100" id="createRoomBtn">Create a New Room</button>
+<button class="btn btn-success w-100" onclick="createRoom('My Cart')">Create a New Room</button>
     </div>
   </div>
 
