@@ -26,3 +26,22 @@ Built for hostel/office scenarios where friends order together from Swiggy, Blin
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/keerthanagowd/12052026_KeerthanaGowd_CartShare.git
+## 📸 Screenshots
+
+### 1. Login Page
+![Login Page](./assets/IMG-20260616-WA0021.jpg)
+
+### 2. Register Page  
+![Register Page](./assets/IMG-20260616-WA0019.jpg)
+
+### 3. Dashboard - Empty Cart
+![Dashboard Empty](./assets/IMG-20260616-WA0022.jpg)
+
+### 4. Dashboard - With Items
+![Dashboard Cart](./assets/IMG-20260616-WA0024.jpg)
+
+### 5. Payment Receipt
+![Receipt](./assets/IMG-20260616-WA0026.jpg)
+
+### 6. Print Receipt View
+![Print Receipt](./assets/IMG-20260616-WA0027.jpg)
