@@ -1,92 +1,98 @@
-// CartShare App.js - Fixed Version
-const STORAGE_KEYS = {
-    USERS: 'cartshare_users',
-    CURRENT_USER: 'cartshare_current_user',
-    CARTS: 'cartshare_carts',
-    CART_ITEMS: 'cartshare_cart_items',
-    INVITES: 'cartshare_invites'
+/// CartShare App - Firebase Version for Brief
+
+// Firebase Config - Nee screenshot nunchi techukunna
+const firebaseConfig = {
+  apiKey: "AIzaSyAx9C3vNYuWTNiQv0oE7ZxcZepcCQ-FCU",
+  authDomain: "keerthana-cart-cd019.firebaseapp.com",
+  databaseURL: "https://keerthana-cart-cd019-default-rtdb.firebaseio.com",
+  projectId: "keerthana-cart-cd019",
+  storageBucket: "keerthana-cart-cd019.firebasestorage.app",
+  messagingSenderId: "907890031134",
+  appId: "1:907890031134:web:b66de4ec0ef9fcb4a58f",
+  measurementId: "G-ZT550EWQPF"
 };
 
-function getUsers() {
-    const raw = localStorage.getItem(STORAGE_KEYS.USERS);
-    return raw ? JSON.parse(raw) : [];
-}
+firebase.initializeApp(firebaseConfig);
 
-function saveUsers(users) {
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-}
+// Get Room Code & User Name
+const urlParams = new URLSearchParams(window.location.search);
+const roomCode = urlParams.get('room');
+const userName = localStorage.getItem('cartShareUser') || 'Guest';
 
-function getCurrentUser() {
-    const raw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    return raw ? JSON.parse(raw) : null;
-}
+document.getElementById('roomCode').innerText = roomCode || 'No Room';
+document.getElementById('userName').innerText = userName;
 
-function setCurrentUser(user) {
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
-}
+const roomRef = firebase.database().ref('rooms/' + roomCode);
+const itemsRef = roomRef.child('items');
+const logRef = roomRef.child('activityLog');
 
-function logout() {
-    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    window.location.href = 'index.html';
-}
-// Room Functions - Add these to app.js
+// Load Items & Calculate Total
+itemsRef.on('value', (snapshot) => {
+  const items = snapshot.val();
+  const list = document.getElementById('itemList');
+  list.innerHTML = '';
+  let total = 0;
+  let count = 0;
 
-function generateRoomCode() {
-    return Math.random().toString(36).substring(2, 8).toUpperCase();
-}
-
-function getRooms() {
-    const raw = localStorage.getItem(STORAGE_KEYS.CARTS);
-    return raw ? JSON.parse(raw) : [];
-}
-
-function saveRooms(rooms) {
-    localStorage.setItem(STORAGE_KEYS.CARTS, JSON.stringify(rooms));
-}
-
-function createRoom(roomName) {
-    const user = getCurrentUser();
-    if (!user) {
-        alert('Please login first');
-        return;
+  if (items) {
+    for (let key in items) {
+      const item = items[key];
+      total += Number(item.price) || 0;
+      count++;
+      list.innerHTML += `
+        <div class="item">
+          <span>${item.name} - ₹${item.price}</span>
+          <button class="delete-btn" onclick="deleteItem('${key}', '${item.name}')">Delete</button>
+        </div>
+      `;
     }
-    
-    const rooms = getRooms();
-    const newRoom = {
-        id: generateRoomCode(),
-        name: roomName || 'My Cart',
-        owner: user.email,
-        members: [user.email],
-        items: [],
-        createdAt: new Date().toISOString()
-    };
-    
-    rooms.push(newRoom);
-    saveRooms(rooms);
-    
-    // Redirect to room page
-    window.location.href = `room.html?id=${newRoom.id}`;
+  }
+  document.getElementById('totalAmount').innerText = total;
+  document.getElementById('memberCount').innerText = count > 0? '1+' : '1';
+});
+
+// Load Activity Log - Brief Requirement
+logRef.limitToLast(10).on('value', (snapshot) => {
+  const logs = snapshot.val();
+  const logDiv = document.getElementById('activityLog');
+  logDiv.innerHTML = '';
+
+  if (logs) {
+    Object.keys(logs).reverse().forEach(key => {
+      logDiv.innerHTML += `<div class="log-item">${logs[key].message}</div>`;
+    });
+  }
+});
+
+// Add Item Function
+window.addItem = function() {
+  const itemName = document.getElementById('itemName').value.trim();
+  const itemPrice = document.getElementById('itemPrice').value.trim();
+
+  if (itemName && itemPrice) {
+    itemsRef.push({
+      name: itemName,
+      price: Number(itemPrice),
+      addedBy: userName
+    });
+
+    logRef.push({
+      message: `${userName} added ${itemName} - ₹${itemPrice}`,
+      timestamp: Date.now()
+    });
+
+    document.getElementById('itemName').value = '';
+    document.getElementById('itemPrice').value = '';
+  } else {
+    alert('Please enter item name and price');
+  }
 }
 
-function joinRoom(roomCode) {
-    const user = getCurrentUser();
-    if (!user) {
-        alert('Please login first');
-        return;
-    }
-    
-    const rooms = getRooms();
-    const room = rooms.find(r => r.id === roomCode.toUpperCase());
-    
-    if (!room) {
-        alert('Room not found!');
-        return;
-    }
-    
-    if (!room.members.includes(user.email)) {
-        room.members.push(user.email);
-        saveRooms(rooms);
-    }
-    
-    window.location.href = `room.html?id=${room.id}`;
+// Delete Item Function
+window.deleteItem = function(key, itemName) {
+  itemsRef.child(key).remove();
+  logRef.push({
+    message: `${userName} removed ${itemName}`,
+    timestamp: Date.now()
+  });
 }
